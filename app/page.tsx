@@ -68,11 +68,12 @@ function ClickSourceHandler({
     } else {
       // referrer로 네이버카페 감지
       const referrer = document.referrer;
-      console.log('[referrer]', referrer);
-      const matched = CAFE_CONFIG.find(cafe =>
-        referrer.includes(`cafe.naver.com/${cafe.id}`) ||
-        referrer.includes(`/cafes/${cafe.id}`) ||
-        (cafe.numericId && referrer.includes(`cafes/${cafe.numericId}`))
+      console.log("[referrer]", referrer);
+      const matched = CAFE_CONFIG.find(
+        (cafe) =>
+          referrer.includes(`cafe.naver.com/${cafe.id}`) ||
+          referrer.includes(`/cafes/${cafe.id}`) ||
+          (cafe.numericId && referrer.includes(`cafes/${cafe.numericId}`)),
       );
       if (matched) {
         onSourceChange(`맘카페_${matched.name}`);
@@ -213,7 +214,7 @@ const CERT_CATEGORIES = [
 ];
 
 function StepFlowContent({ clickSource }: { clickSource: string }) {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(2);
   const [formData, setFormData] = useState({
     name: "", // 이름
     contact: "", // 연락처
@@ -258,7 +259,10 @@ function StepFlowContent({ clickSource }: { clickSource: string }) {
       setFormData({ ...formData, hope_course: updated.join(", ") });
     } else {
       const toAdd = catOptions.filter((o) => !selectedCerts.includes(o));
-      setFormData({ ...formData, hope_course: [...selectedCerts, ...toAdd].join(", ") });
+      setFormData({
+        ...formData,
+        hope_course: [...selectedCerts, ...toAdd].join(", "),
+      });
     }
   };
 
@@ -307,15 +311,16 @@ function StepFlowContent({ clickSource }: { clickSource: string }) {
           contact: formData.contact,
           education: formData.education,
           hope_course: formData.hope_course,
-          major_category: CERT_CATEGORIES
-            .filter(cat => cat.options.some(opt => selectedCerts.includes(opt)))
-            .map(cat => cat.label)
+          major_category: CERT_CATEGORIES.filter((cat) =>
+            cat.options.some((opt) => selectedCerts.includes(opt)),
+          )
+            .map((cat) => cat.label)
             .join(", "),
           reason: formData.reason,
           mamcafe_activity: formData.mamcafe_activity,
           click_source: formData.mamcafe_activity
             ? `맘카페_${formData.mamcafe_activity}`
-            : '맘카페',
+            : "맘카페",
         }),
       });
 
@@ -385,7 +390,8 @@ function StepFlowContent({ clickSource }: { clickSource: string }) {
                 </div>
                 <div className={styles.infoItem}>
                   <div className={styles.infoTitle}>
-                    <div className={styles.infoNumber}>1</div> 선착순 수업료 전액면제
+                    <div className={styles.infoNumber}>1</div> 선착순 수업료
+                    전액면제
                   </div>
                   <div className={styles.infoDesc}>
                     원래 수업료 30만원 {"->"} 전액면제
@@ -404,7 +410,7 @@ function StepFlowContent({ clickSource }: { clickSource: string }) {
                     <div className={styles.infoNumber}>3</div> 온라인 수업
                   </div>
                   <div className={styles.infoDesc}>
-                   모든 수업은 100% 온라인으로 진행
+                    모든 수업은 100% 온라인으로 진행
                   </div>
                 </div>
                 <div className={styles.infoSection}>
@@ -483,7 +489,16 @@ function StepFlowContent({ clickSource }: { clickSource: string }) {
               <label className={styles.inputLabel}>
                 희망과정을 선택해주세요{" "}
                 <span style={{ color: "#EF4444" }}>*</span>
-                <span style={{ fontSize: "13px", color: "#9ca3af", fontWeight: 400 }}> (복수선택 가능)</span>
+                <span
+                  style={{
+                    fontSize: "13px",
+                    color: "#9ca3af",
+                    fontWeight: 400,
+                  }}
+                >
+                  {" "}
+                  (복수선택 가능)
+                </span>
               </label>
               <button
                 type="button"
@@ -492,21 +507,43 @@ function StepFlowContent({ clickSource }: { clickSource: string }) {
               >
                 {selectedCerts.length > 0 ? (
                   <span className={styles.certTriggerSelected}>
-                    {selectedCerts.length}개 선택됨: {selectedCerts.slice(0, 2).join(", ")}{selectedCerts.length > 2 ? ` 외 ${selectedCerts.length - 2}개` : ""}
+                    {selectedCerts.length}개 선택됨:{" "}
+                    {selectedCerts.slice(0, 2).join(", ")}
+                    {selectedCerts.length > 2
+                      ? ` 외 ${selectedCerts.length - 2}개`
+                      : ""}
                   </span>
                 ) : (
-                  <span className={styles.certTriggerPlaceholder}>과정을 선택해주세요</span>
+                  <span className={styles.certTriggerPlaceholder}>
+                    과정을 선택해주세요
+                  </span>
                 )}
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <path d="M5 7.5L10 12.5L15 7.5" stroke="#6B7280" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path
+                    d="M5 7.5L10 12.5L15 7.5"
+                    stroke="#6B7280"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </svg>
               </button>
             </div>
 
             <div className={styles.inputGroup}>
               <label className={styles.inputLabel}>
-                취득사유가 어떻게 되시나요? <span style={{ color: "#EF4444" }}>*</span>
-                <span style={{ color: "#9ca3af", fontWeight: 400, fontSize: "13px" }}> (복수선택 가능)</span>
+                취득사유가 어떻게 되시나요?{" "}
+                <span style={{ color: "#EF4444" }}>*</span>
+                <span
+                  style={{
+                    color: "#9ca3af",
+                    fontWeight: 400,
+                    fontSize: "13px",
+                  }}
+                >
+                  {" "}
+                  (복수선택 가능)
+                </span>
               </label>
               <div className={styles.reasonCheckGroup}>
                 {["즉시취업", "이직", "미래준비", "취미"].map((opt) => {
@@ -514,7 +551,10 @@ function StepFlowContent({ clickSource }: { clickSource: string }) {
                     ? formData.reason.split(", ").filter(Boolean).includes(opt)
                     : false;
                   return (
-                    <label key={opt} className={`${styles.reasonCheckItem} ${selected ? styles.reasonCheckItemSelected : ""}`}>
+                    <label
+                      key={opt}
+                      className={`${styles.reasonCheckItem} ${selected ? styles.reasonCheckItemSelected : ""}`}
+                    >
                       <input
                         type="checkbox"
                         checked={selected}
@@ -525,7 +565,10 @@ function StepFlowContent({ clickSource }: { clickSource: string }) {
                           const updated = selected
                             ? current.filter((r) => r !== opt)
                             : [...current, opt];
-                          setFormData({ ...formData, reason: updated.join(", ") });
+                          setFormData({
+                            ...formData,
+                            reason: updated.join(", "),
+                          });
                         }}
                         style={{ display: "none" }}
                       />
@@ -538,8 +581,18 @@ function StepFlowContent({ clickSource }: { clickSource: string }) {
 
             <div className={styles.inputGroup}>
               <label className={styles.inputLabel}>
-                활동하고 계신 맘카페를 적어주세요 <span style={{ color: "#EF4444" }}>*</span>
-                <span style={{ color: "#9ca3af", fontWeight: 400, fontSize: "13px" }}> (제휴여부 확인)</span>
+                활동하고 계신 맘카페를 적어주세요{" "}
+                <span style={{ color: "#EF4444" }}>*</span>
+                <span
+                  style={{
+                    color: "#9ca3af",
+                    fontWeight: 400,
+                    fontSize: "13px",
+                  }}
+                >
+                  {" "}
+                  (제휴여부 확인)
+                </span>
               </label>
               <input
                 type="text"
@@ -611,11 +664,22 @@ function StepFlowContent({ clickSource }: { clickSource: string }) {
 
       {/* 자격증 선택 모달 */}
       {showCertModal && (
-        <div className={styles.modalOverlay} onClick={() => setShowCertModal(false)}>
-          <div className={styles.certModalContainer} onClick={(e) => e.stopPropagation()}>
+        <div
+          className={styles.modalOverlay}
+          onClick={() => setShowCertModal(false)}
+        >
+          <div
+            className={styles.certModalContainer}
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className={styles.certModalHeader}>
               <h3 className={styles.certModalTitle}>과정 선택</h3>
-              <button className={styles.certModalCloseButton} onClick={() => setShowCertModal(false)}>✕</button>
+              <button
+                className={styles.certModalCloseButton}
+                onClick={() => setShowCertModal(false)}
+              >
+                ✕
+              </button>
             </div>
 
             <div className={styles.certModalBody}>
@@ -647,18 +711,22 @@ function StepFlowContent({ clickSource }: { clickSource: string }) {
                         className={`${styles.certListItem} ${CERT_CATEGORIES[selectedCategoryIdx].options.every((o) => selectedCerts.includes(o)) ? styles.certListItemSelected : ""}`}
                       >
                         <span>전체</span>
-                        {CERT_CATEGORIES[selectedCategoryIdx].options.every((o) => selectedCerts.includes(o)) && <span>✓</span>}
+                        {CERT_CATEGORIES[selectedCategoryIdx].options.every(
+                          (o) => selectedCerts.includes(o),
+                        ) && <span>✓</span>}
                       </button>
-                      {CERT_CATEGORIES[selectedCategoryIdx].options.map((opt) => (
-                        <button
-                          key={opt}
-                          onClick={() => toggleCert(opt)}
-                          className={`${styles.certListItem} ${selectedCerts.includes(opt) ? styles.certListItemSelected : ""}`}
-                        >
-                          <span>{opt}</span>
-                          {selectedCerts.includes(opt) && <span>✓</span>}
-                        </button>
-                      ))}
+                      {CERT_CATEGORIES[selectedCategoryIdx].options.map(
+                        (opt) => (
+                          <button
+                            key={opt}
+                            onClick={() => toggleCert(opt)}
+                            className={`${styles.certListItem} ${selectedCerts.includes(opt) ? styles.certListItemSelected : ""}`}
+                          >
+                            <span>{opt}</span>
+                            {selectedCerts.includes(opt) && <span>✓</span>}
+                          </button>
+                        ),
+                      )}
                     </div>
                   </div>
                 </div>
@@ -677,12 +745,16 @@ function StepFlowContent({ clickSource }: { clickSource: string }) {
                         justifyContent: "center",
                         pointerEvents: "none",
                         paddingBottom: "4px",
-                        paddingRight : "30px"
+                        paddingRight: "30px",
                       }}
                     >
                       <motion.div
                         animate={{ y: [0, 6, 0] }}
-                        transition={{ duration: 1.1, repeat: Infinity, ease: "easeInOut" }}
+                        transition={{
+                          duration: 1.1,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                        }}
                       >
                         <svg
                           width="28"
@@ -706,33 +778,60 @@ function StepFlowContent({ clickSource }: { clickSource: string }) {
             {/* 선택된 과정 태그 */}
             <div className={styles.selectedCertContainer}>
               <div className={styles.selectedCertLabel}>
-                <span>선택한 과정 <span className={styles.selectedCertCount}>{selectedCerts.length}</span></span>
+                <span>
+                  선택한 과정{" "}
+                  <span className={styles.selectedCertCount}>
+                    {selectedCerts.length}
+                  </span>
+                </span>
               </div>
               <div className={styles.selectedCertList}>
                 {selectedCerts.map((cert) => (
                   <div key={cert} className={styles.selectedCertTag}>
                     <span>{cert}</span>
-                    <button className={styles.removeTagButton} onClick={() => toggleCert(cert)}>✕</button>
+                    <button
+                      className={styles.removeTagButton}
+                      onClick={() => toggleCert(cert)}
+                    >
+                      ✕
+                    </button>
                   </div>
                 ))}
                 {selectedCerts.length === 0 && (
-                  <div className={styles.noCertMessage}>선택한 과정이 없습니다</div>
+                  <div className={styles.noCertMessage}>
+                    선택한 과정이 없습니다
+                  </div>
                 )}
               </div>
             </div>
 
             <div className={styles.certModalFooter}>
-              <button className={styles.certModalResetButton} onClick={deselectAll}>
+              <button
+                className={styles.certModalResetButton}
+                onClick={deselectAll}
+              >
                 <div className={styles.resetButtonContent}>
                   <span>초기화</span>
                   <div className={styles.resetIcon}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                      <path d="M8 2.03321C6.33627 2.03326 4.9234 2.61176 3.76758 3.76758C2.61175 4.92341 2.03326 6.33627 2.0332 8C2.03324 9.66366 2.61189 11.0766 3.76758 12.2324C4.92338 13.3881 6.33634 13.9667 8 13.9668C9.15476 13.9668 10.206 13.6683 11.1514 13.0713C12.0942 12.4758 12.8209 11.6814 13.3301 10.6895C13.4449 10.4884 13.4505 10.2715 13.3535 10.0498C13.2569 9.82916 13.0935 9.6795 12.8691 9.60938C12.6659 9.54261 12.463 9.5463 12.2646 9.6211C12.0646 9.69663 11.9086 9.83209 11.7998 10.0225L11.7988 10.0244C11.4289 10.718 10.9062 11.2704 10.2305 11.6826C9.55588 12.0941 8.81313 12.2998 8 12.2998C6.8041 12.2998 5.79066 11.8824 4.9541 11.0459C4.11766 10.2093 3.69926 9.1959 3.69922 8C3.69928 6.80403 4.11752 5.79069 4.9541 4.9541C5.79069 4.11752 6.80403 3.69928 8 3.69922C8.77737 3.69925 9.49674 3.89055 10.1592 4.27246C10.7709 4.62529 11.261 5.10193 11.6338 5.69922H9.4668C9.23471 5.69928 9.03476 5.78025 8.87402 5.94043C8.71317 6.10077 8.63235 6.30061 8.63281 6.53321C8.63336 6.76551 8.71437 6.96565 8.87402 7.12598C9.03393 7.2863 9.23401 7.36616 9.4668 7.36621H13.1338C13.3662 7.36664 13.5662 7.28728 13.7266 7.12696C13.887 6.96653 13.9668 6.76618 13.9668 6.53321V2.86621C13.9677 2.6342 13.8881 2.43412 13.7275 2.27344C13.5667 2.11272 13.3655 2.03266 13.1328 2.03321C12.9007 2.03391 12.7012 2.1138 12.541 2.27344C12.3805 2.43339 12.2999 2.63329 12.2998 2.86621V3.88672C11.7771 3.32321 11.1639 2.88126 10.4609 2.56348C9.67821 2.20974 8.85733 2.03323 8 2.03321Z" fill="#656565"/>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                    >
+                      <path
+                        d="M8 2.03321C6.33627 2.03326 4.9234 2.61176 3.76758 3.76758C2.61175 4.92341 2.03326 6.33627 2.0332 8C2.03324 9.66366 2.61189 11.0766 3.76758 12.2324C4.92338 13.3881 6.33634 13.9667 8 13.9668C9.15476 13.9668 10.206 13.6683 11.1514 13.0713C12.0942 12.4758 12.8209 11.6814 13.3301 10.6895C13.4449 10.4884 13.4505 10.2715 13.3535 10.0498C13.2569 9.82916 13.0935 9.6795 12.8691 9.60938C12.6659 9.54261 12.463 9.5463 12.2646 9.6211C12.0646 9.69663 11.9086 9.83209 11.7998 10.0225L11.7988 10.0244C11.4289 10.718 10.9062 11.2704 10.2305 11.6826C9.55588 12.0941 8.81313 12.2998 8 12.2998C6.8041 12.2998 5.79066 11.8824 4.9541 11.0459C4.11766 10.2093 3.69926 9.1959 3.69922 8C3.69928 6.80403 4.11752 5.79069 4.9541 4.9541C5.79069 4.11752 6.80403 3.69928 8 3.69922C8.77737 3.69925 9.49674 3.89055 10.1592 4.27246C10.7709 4.62529 11.261 5.10193 11.6338 5.69922H9.4668C9.23471 5.69928 9.03476 5.78025 8.87402 5.94043C8.71317 6.10077 8.63235 6.30061 8.63281 6.53321C8.63336 6.76551 8.71437 6.96565 8.87402 7.12598C9.03393 7.2863 9.23401 7.36616 9.4668 7.36621H13.1338C13.3662 7.36664 13.5662 7.28728 13.7266 7.12696C13.887 6.96653 13.9668 6.76618 13.9668 6.53321V2.86621C13.9677 2.6342 13.8881 2.43412 13.7275 2.27344C13.5667 2.11272 13.3655 2.03266 13.1328 2.03321C12.9007 2.03391 12.7012 2.1138 12.541 2.27344C12.3805 2.43339 12.2999 2.63329 12.2998 2.86621V3.88672C11.7771 3.32321 11.1639 2.88126 10.4609 2.56348C9.67821 2.20974 8.85733 2.03323 8 2.03321Z"
+                        fill="#656565"
+                      />
                     </svg>
                   </div>
                 </div>
               </button>
-              <button className={styles.certModalConfirmButton} onClick={() => setShowCertModal(false)}>
+              <button
+                className={styles.certModalConfirmButton}
+                onClick={() => setShowCertModal(false)}
+              >
                 선택하기
               </button>
             </div>
@@ -787,8 +886,9 @@ function StepFlowContent({ clickSource }: { clickSource: string }) {
                 <p className={styles.modalPrivacyItem}>
                   <strong>2. 수집 및 이용하는 개인정보 항목</strong>
                   <br />
-                  필수 - 이름, 연락처(휴대전화번호), 희망과정, 취득사유, 맘카페이름<br/>
-                  
+                  필수 - 이름, 연락처(휴대전화번호), 희망과정, 취득사유,
+                  맘카페이름
+                  <br />
                 </p>
                 <p className={styles.modalPrivacyItem}>
                   <strong>3. 보유 및 이용 기간</strong>
@@ -807,7 +907,6 @@ function StepFlowContent({ clickSource }: { clickSource: string }) {
           </div>
         </div>
       )}
-
     </div>
   );
 }
